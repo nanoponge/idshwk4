@@ -15,7 +15,7 @@ event zeek_init()
                         local all_res = result["all_response"];
                         local 404_res = result["404_response"];
                         local 404_u = result["404_url"];
-                        if(404_res$sum>2&&(404_res$sum/all_res$sum)>0.2&&(404_u$unique/404_res$sum)>0.5)
+                        if((404_res$sum>2)&&((404_res$sum/all_res$sum)>0.2)&&((404_u$unique/404_res$sum)>0.5))
                         {
                                 print fmt("%s is a scanner with %d scan attemps on %d urls", key$host,404_res$num,404_u$unique);
                         }
