@@ -12,17 +12,20 @@ event zeek_init()
                       $reducers = set(r1,r2,r3),
                       $epoch_result(ts: time, key: SumStats::Key, result: SumStats::Result) =
                         {
-                        local all_res = result["all_response"];
-                        local 404_res = result["404_response"];
-                        local 404_u = result["404_url"];
-                        if((404_res$sum>2)&&((404_res$sum/all_res$sum)>0.2)&&((404_u$unique/404_res$sum)>0.5))
-                        {
-                                print fmt("%s is a scanner with %d scan attemps on %d urls", key$host,404_res$num,404_u$unique);
-                        }
-
-                        
+                                local rs1 = result["all_response"];
+                                local rs2 = result["404_response"];
+                                local rs3 = result["404_url"];
+                         if (rs2$sum > 2)
+                         {
+                              if (rs2$sum / rs1$sum > 0.2) 
+                              {
+                                 if (rs3$unique / rs2$sum > 0.5) 
+                                 print fmt(" %s is a scanner with %.0f scan attemps on %d urls", key$host, rs2$sum, rs3$unique); 
+                              }
+                          }
                         }]);
     }
+    
     
     event http_reply (c: connection, version: string, code: count, reason: string)
     {
